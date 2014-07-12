@@ -4,7 +4,7 @@ import org.gradle.api.tasks.JavaExec;
 ext.antlr = [
     antlrSource: 'src/main/antlr3',
     destinationDir: "src/generated-sources/antlr3"
-
+]
 
 task antlrOutputDir << {
 	mkdir(antlr.destinationDir)
