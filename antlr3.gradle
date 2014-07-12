@@ -1,9 +1,10 @@
 import java.nio.file.Paths;
 import org.gradle.api.tasks.JavaExec;
 
-configurations {
-	antlr3
-}
+ext.antlr = [
+    antlrSource: 'src/main/antlr3',
+    destinationDir: "src/generated-sources/antlr3"
+
 
 task antlrOutputDir << {
 	mkdir(antlr.destinationDir)
@@ -36,7 +37,6 @@ task generateGrammarSource(dependsOn: antlrOutputDir) {
 	}	
 }
 
-//project.configurations.antlr3.getDependencies().add('org.antlr:antlr:3.4')
 compileJava.dependsOn generateGrammarSource
 sourceSets.main.java.srcDirs += antlr.destinationDir
 
