@@ -1,0 +1,42 @@
+import java.nio.file.Paths;
+import org.gradle.api.tasks.JavaExec;
+
+configurations {
+	antlr3
+}
+
+task antlrOutputDir << {
+	mkdir(antlr.destinationDir)
+}
+
+task generateGrammarSource(dependsOn: antlrOutputDir) {
+	description = 'Generates Java sources from Antlr3 grammars.'
+
+	inputs.dir file(antlr.antlrSource)
+	outputs.dir file(antlr.destinationDir)
+
+	def grammars = fileTree(antlr.antlrSource).include('**/*.g')
+
+	grammars.files.each {File grammarFile ->
+		java.nio.file.Path grammar = Paths.get(grammarFile.absolutePath)
+		java.nio.file.Path base = Paths.get(new File(antlr.antlrSource).absolutePath)
+		java.nio.file.Path relPath = base.relativize(grammar)
+		File relFile = relPath.toFile()
+		String pkgDir = relFile.getParentFile()
+		String pkg = pkgDir.toString().replace(File.separator, '.')
+		
+		doLast {
+			javaexec {
+				main = 'org.antlr.Tool'
+				classpath = configurations.compile
+				
+				args = ["-o", "${antlr.destinationDir}/${pkgDir}", grammarFile].flatten()
+			}
+		}
+	}	
+}
+
+//project.configurations.antlr3.getDependencies().add('org.antlr:antlr:3.4')
+compileJava.dependsOn generateGrammarSource
+sourceSets.main.java.srcDirs += antlr.destinationDir
+
