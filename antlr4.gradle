@@ -1,26 +1,26 @@
 import java.nio.file.Paths;
 import org.gradle.api.tasks.JavaExec;
 
-ext.antlr = [
+ext.antlr4 = [
     antlrSource: 'src/main/antlr4',
     destinationDir: "src/generated-sources/antlr4"
 ]
 
-task antlrOutputDir << {
-	mkdir(antlr.destinationDir)
+task antlr4OutputDir << {
+	mkdir(antlr4.destinationDir)
 }
 
-task generateGrammarSource(dependsOn: antlrOutputDir) {
-	description = 'Generates Java sources from Antlr3 grammars.'
+task antlr4(dependsOn: antlr4OutputDir) {
+	description = 'Generates Java sources from Antlr4 grammars.'
 
-	inputs.dir file(antlr.antlrSource)
-	outputs.dir file(antlr.destinationDir)
+	inputs.dir file(antlr4.antlrSource)
+	outputs.dir file(antlr4.destinationDir)
 
-	def grammars = fileTree(antlr.antlrSource).include('**/*.g4')
+	def grammars = fileTree(antlr4.antlrSource).include('**/*.g4')
 
 	grammars.files.each {File grammarFile ->
 		java.nio.file.Path grammar = Paths.get(grammarFile.absolutePath)
-		java.nio.file.Path base = Paths.get(new File(antlr.antlrSource).absolutePath)
+		java.nio.file.Path base = Paths.get(new File(antlr4.antlrSource).absolutePath)
 		java.nio.file.Path relPath = base.relativize(grammar)
 		File relFile = relPath.toFile()
 		String pkgDir = relFile.getParentFile()
@@ -31,12 +31,12 @@ task generateGrammarSource(dependsOn: antlrOutputDir) {
 				main = 'org.antlr.v4.Tool'
 				classpath = configurations.compile
 				
-				args = ["-o", "${antlr.destinationDir}/${pkgDir}", grammarFile].flatten()
+				args = ["-o", "${antlr4.destinationDir}/${pkgDir}", grammarFile].flatten()
 			}
 		}
 	}	
 }
 
-compileJava.dependsOn generateGrammarSource
-sourceSets.main.java.srcDirs += antlr.destinationDir
+compileJava.dependsOn antl4
+sourceSets.main.java.srcDirs += antlr4.destinationDir
 
