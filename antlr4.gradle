@@ -37,6 +37,6 @@ task antlr4(dependsOn: antlr4OutputDir) {
 	}	
 }
 
-compileJava.dependsOn antl4
+compileJava.dependsOn antlr4
 sourceSets.main.java.srcDirs += antlr4.destinationDir
 
