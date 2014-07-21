@@ -10,7 +10,7 @@ task antlr3OutputDir << {
 	mkdir(antlr3.destinationDir)
 }
 
-task antlr3(dependsOn: antlr3OutputDir) {
+task antlr3Task(dependsOn: antlr3OutputDir) {
 	description = 'Generates Java sources from Antlr3 grammars.'
 
 	inputs.dir file(antlr3.antlrSource)
@@ -37,6 +37,6 @@ task antlr3(dependsOn: antlr3OutputDir) {
 	}	
 }
 
-compileJava.dependsOn antlr3
+compileJava.dependsOn antlr3Task
 sourceSets.main.java.srcDirs += antlr3.destinationDir
 
