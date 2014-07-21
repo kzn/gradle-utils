@@ -10,7 +10,7 @@ task antlr4OutputDir << {
 	mkdir(antlr4.destinationDir)
 }
 
-task antlr4(dependsOn: antlr4OutputDir) {
+task antlr4Task(dependsOn: antlr4OutputDir) {
 	description = 'Generates Java sources from Antlr4 grammars.'
 
 	inputs.dir file(antlr4.antlrSource)
@@ -37,6 +37,6 @@ task antlr4(dependsOn: antlr4OutputDir) {
 	}	
 }
 
-compileJava.dependsOn antlr4
+compileJava.dependsOn antlr4Task
 sourceSets.main.java.srcDirs += antlr4.destinationDir
 
