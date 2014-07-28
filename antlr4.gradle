@@ -27,11 +27,14 @@ task antlr4Task(dependsOn: antlr4OutputDir) {
 		String pkg = pkgDir.toString().replace(File.separator, '.')
 		
 		doLast {
-			javaexec {
+			  javaexec {
 				main = 'org.antlr.v4.Tool'
 				classpath = configurations.compile
 				
-				args = ["-o", "${antlr4.destinationDir}/${pkgDir}", grammarFile].flatten()
+				args = ["-o", "${antlr4.destinationDir}/${pkgDir}", grammarFile]
+				if(antlr4.options != null)
+				    args.add(antlr4.options);
+				args = args.flatten()
 			}
 		}
 	}	
