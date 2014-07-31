@@ -20,7 +20,7 @@ task antlr4Task(dependsOn: antlr4OutputDir) {
 
 	grammars.files.each {File grammarFile ->
 		java.nio.file.Path grammar = Paths.get(grammarFile.absolutePath)
-		java.nio.file.Path base = Paths.get(new File(antlr4.antlrSource).absolutePath)
+		java.nio.file.Path base = Paths.get(new File(project.projectDir, antlr4.antlrSource).absolutePath)
 		java.nio.file.Path relPath = base.relativize(grammar)
 		File relFile = relPath.toFile()
 		String pkgDir = relFile.getParentFile()

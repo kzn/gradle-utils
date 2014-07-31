@@ -20,8 +20,9 @@ task antlr3Task(dependsOn: antlr3OutputDir) {
 
 	grammars.files.each {File grammarFile ->
 		java.nio.file.Path grammar = Paths.get(grammarFile.absolutePath)
-		java.nio.file.Path base = Paths.get(new File(antlr3.antlrSource).absolutePath)
+		java.nio.file.Path base = Paths.get(new File(project.projectDir, antlr3.antlrSource).absolutePath)
 		java.nio.file.Path relPath = base.relativize(grammar)
+		
 		File relFile = relPath.toFile()
 		String pkgDir = relFile.getParentFile()
 		String pkg = pkgDir.toString().replace(File.separator, '.')
